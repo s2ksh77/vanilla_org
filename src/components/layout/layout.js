@@ -1,16 +1,11 @@
+import { initializeTree } from "../../lib/logic.js";
+
 export default function Layout() {
   const layout = document.createElement("div");
   layout.id = "layout";
 
-  const lnb = `
-    <div id="lnb">
-      <h1>조직도</h1>
-      <ul>
-        <li>춘식이</li>
-    </div>
-  `;
-
-  layout.innerHTML = lnb;
+  const initializeNode = async () => await initializeTree("0", layout);
+  initializeNode();
 
   return layout;
 }
