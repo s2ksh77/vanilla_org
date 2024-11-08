@@ -1,4 +1,4 @@
-import { fetchDepartmentNode } from "./api.js";
+import { fetchDepartmentNode, fetchUserList } from "./api.js";
 
 export async function initializeTree(rootCode = "0", targetElement) {
   const rootData = await fetchDepartmentNode(rootCode);
@@ -56,7 +56,7 @@ function createTreeNodeHTML(department, depth) {
   return `
     <li class="tree-node" data-code="${department.code}" data-depth="${depth}">
       <button class="toggle-btn">+</button>
-      ${department.name}
+      <span class="tree-title">${department.name}</span>
     </li>
   `;
 }
@@ -71,10 +71,13 @@ function createTreeNodeElement(department, depth) {
 
 function setupTreeNode(department, depth) {
   const li = document.createElement("li");
+  const span = document.createElement("span");
   li.classList.add("tree-node");
-  li.textContent = department.name;
+  span.classList.add("tree-title");
+  span.textContent = department.name;
   li.dataset.code = department.code;
   li.dataset.depth = depth;
+  li.appendChild(span);
   return li;
 }
 
@@ -106,7 +109,23 @@ function toggleEventDelegation(targetElement) {
       const { code, depth } = li.dataset;
       await handleToggleButton(li, button, code, depth);
     }
+
+    if (event.target.classList.contains("tree-title")) {
+      const li = event.target.closest("li");
+      const { code } = li.dataset;
+      const textContent = li.querySelector("span").textContent;
+      const customEvent = new CustomEvent("nodeClick", {
+        detail: { textContent, code },
+      });
+      targetElement.dispatchEvent(customEvent);
+    }
   };
 
   targetElement.addEventListener("click", handleEvent);
+}
+
+export async function fetchUsersByDepartment(departmentCode) {
+  const userList = await fetchUserList();
+  /** departmentCodePath 에 포함되어있는거 다 줘야하나 */
+  return userList.filter((user) => user.departmentCode === departmentCode);
 }
