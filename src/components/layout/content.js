@@ -40,12 +40,15 @@ export default function Content() {
   const handleEmptyResult = async () => {
     alert("검색 결과가 없습니다. 전체 리스트로 돌아갑니다.");
     await handleSearch("");
+    Content.setTextContent("전체");
   };
 
   const handleKeydown = async (e) => {
     const query = e.target.value.trim();
-    if (e.key === "Enter") handleSearch(query);
-    else if (e.key === "Escape") e.target.value = "";
+    if (e.key === "Enter") {
+      handleSearch(query);
+      Content.setTextContent(query ? `"${query}" 검색 결과` : "전체");
+    } else if (e.key === "Escape") e.target.value = "";
   };
 
   const input = Content.querySelector("#searchInput");
