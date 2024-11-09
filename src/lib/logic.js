@@ -6,6 +6,7 @@ export async function initializeTree(rootCode = "0", targetElement) {
   const rootNode = createTreeNode(rootData[0], 0, "node");
 
   const rootUl = document.createElement("ul");
+  rootUl.style.padding = "0px 20px";
   rootUl.appendChild(rootNode);
   targetElement.appendChild(rootUl);
   toggleEventDelegation(targetElement);

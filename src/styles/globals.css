@@ -135,3 +135,38 @@ table tr:hover {
 table td {
   color: #555;
 }
+
+.pagination {
+  position: fixed;
+  bottom: 20px;
+  left: calc(50% + 160px);
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  background-color: white;
+}
+
+.page-btn {
+  padding: 5px 10px;
+  margin: 0 2px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.prev-btn,
+.next-btn {
+  padding: 5px 10px;
+  margin: 0 2px;
+  border: none;
+}
+
+.page-btn.active {
+  background-color: #bbb;
+  color: #fff;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+}

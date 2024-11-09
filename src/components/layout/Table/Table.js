@@ -1,7 +1,25 @@
 import { getDepartmentName } from "../../../lib/utils.js";
+import { createPagination } from "./Pagination.js";
 
 export function createTable(data) {
   const table = document.createElement("table");
+  const thead = createTableHeader();
+  const rowsPerPage = 10;
+  const tbody = createTableBody(data, 1, rowsPerPage);
+
+  const onPageChange = (page) =>
+    updateTableBody(tbody, data, page, rowsPerPage);
+
+  const pagination = createPagination(data.length, onPageChange, rowsPerPage);
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  table.appendChild(pagination);
+
+  return table;
+}
+
+function createTableHeader() {
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
 
@@ -23,41 +41,41 @@ export function createTable(data) {
   });
 
   thead.appendChild(headerRow);
-
-  thead.addEventListener("click", (event) => {
-    const th = event.target.closest("th");
-    if (!th || !["id", "name", "email"].includes(th.dataset.key)) return;
-
-    const key = th.dataset.key;
-    data.sort((a, b) => (a[key] > b[key] ? 1 : -1));
-    renderTableBody(tbody, data);
-  });
-
-  const tbody = document.createElement("tbody");
-  renderTableBody(tbody, data);
-
-  table.appendChild(thead);
-  table.appendChild(tbody);
-
-  return table;
+  return thead;
 }
 
-function renderTableBody(tbody, data) {
-  tbody.innerHTML = "";
+function createTableBody(data, page, rowsPerPage = 10) {
+  const tbody = document.createElement("tbody");
+  updateTableBody(tbody, data, page, rowsPerPage);
+  return tbody;
+}
 
-  const rowsHTML = data
+function updateTableBody(tbody, data, page, rowsPerPage = 10) {
+  tbody.innerHTML = "";
+  if (data.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; padding: 20px;">소속 구성원이 없습니다.</td>
+      </tr>
+    `;
+    return;
+  }
+  const start = (page - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const currentData = data.slice(start, end);
+
+  tbody.innerHTML = currentData
     .map(
       (item) => `
-      <tr>
-      <td>${item.name}</td>
-        <td>${item.id}</td>
-        <td>${item.dutyName}</td>
-        <td>${getDepartmentName(item.departmentNamePath)}</td>
-        <td>${item.telephoneNumber}</td>
-        <td>${item.email}</td>
-      </tr>
-    `
+        <tr>
+          <td>${item.name}</td>
+          <td>${item.id}</td>
+          <td>${item.dutyName}</td>
+          <td>${getDepartmentName(item.departmentNamePath)}</td>
+          <td>${item.telephoneNumber}</td>
+          <td>${item.email}</td>
+        </tr>
+      `
     )
     .join("");
-  tbody.innerHTML = rowsHTML;
 }
