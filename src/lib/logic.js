@@ -1,3 +1,4 @@
+import { TREE_IMG } from "../common/constants.js";
 import { fetchDepartmentNode, fetchUserList } from "./api.js";
 
 export async function initializeTree(rootCode = "0", targetElement) {
@@ -55,29 +56,39 @@ export function createTreeNode(department, depth = 0, type = "html") {
 function createTreeNodeHTML(department, depth) {
   return `
     <li class="tree-node" data-code="${department.code}" data-depth="${depth}">
-      <button class="toggle-btn">+</button>
-      <span class="tree-title">${department.name}</span>
+      <div class="tree-node-wrapper">
+        <button class="toggle-btn">+</button>
+        <img src="${getTreeImgByDepth(depth)}" />
+        <span class="tree-title">${department.name}</span>
+      </div>
     </li>
   `;
 }
 
 function createTreeNodeElement(department, depth) {
-  const li = setupTreeNode(department, depth);
-  const toggleBtn = createToggleButton();
-
-  li.insertBefore(toggleBtn, li.firstChild);
-  return li;
+  return setupTreeNode(department, depth);
 }
 
 function setupTreeNode(department, depth) {
   const li = document.createElement("li");
+  const wrapper = document.createElement("div");
   const span = document.createElement("span");
+  const img = document.createElement("img");
+  const toggleBtn = createToggleButton();
+
+  img.src = getTreeImgByDepth(depth);
   li.classList.add("tree-node");
+  wrapper.classList.add("tree-node-wrapper");
   span.classList.add("tree-title");
+
+  wrapper.appendChild(toggleBtn);
+  wrapper.appendChild(img);
+  wrapper.appendChild(span);
+
   span.textContent = department.name;
   li.dataset.code = department.code;
   li.dataset.depth = depth;
-  li.appendChild(span);
+  li.appendChild(wrapper);
   return li;
 }
 
@@ -93,7 +104,7 @@ function toggleEventDelegation(targetElement) {
     const handleToggleButton = async (li, button, code, depth) => {
       const childrenUl = li.querySelector("ul");
       if (!childrenUl) {
-        await fetchChildrenNode(li, code, depth + 1);
+        await fetchChildrenNode(li, code, Number(depth) + 1);
         button.textContent = "-";
       } else {
         childrenUl.classList.toggle("hidden");
@@ -129,3 +140,5 @@ export async function fetchUsersByDepartment(departmentCode) {
   /** departmentCodePath 에 포함되어있는거 다 줘야하나 */
   return userList.filter((user) => user.departmentCode === departmentCode);
 }
+
+const getTreeImgByDepth = (depth) => TREE_IMG[depth % 4];
