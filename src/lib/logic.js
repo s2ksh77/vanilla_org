@@ -9,9 +9,15 @@ export async function initializeTree(rootCode = "0", targetElement) {
   rootUl.style.padding = "0px 20px";
   rootUl.appendChild(rootNode);
   targetElement.appendChild(rootUl);
+
+  const rootWrapper = rootNode.querySelector(".tree-node-wrapper");
+  rootWrapper.classList.add("selected");
+
   toggleEventDelegation(targetElement);
 
   await fetchChildrenNode(rootNode, rootData[0].code, 1);
+
+  return rootData[0];
 }
 
 export async function fetchChildrenNode(

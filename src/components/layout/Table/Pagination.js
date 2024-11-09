@@ -2,6 +2,7 @@ export function createPagination(totalItems, onPageChange, rowsPerPage = 10) {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
   const pagination = document.createElement("div");
   pagination.classList.add("pagination");
+  if (totalItems === 0) return pagination;
 
   pagination.innerHTML = createPaginationButtons(1, totalPages);
 

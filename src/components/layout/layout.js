@@ -9,7 +9,11 @@ export default function Layout() {
   const lnb = LNB();
   const content = Content();
 
-  const initializeNode = async () => await initializeTree("0", lnb);
+  const initializeNode = async () => {
+    const { code, name } = await initializeTree("0", lnb);
+    content.setTextContent(name);
+    content.setDepartmentCode(code);
+  };
   initializeNode();
 
   lnb.addEventListener("nodeClick", (event) => {

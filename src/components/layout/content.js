@@ -8,7 +8,7 @@ export default function Content() {
 
   const ContentHeader = `
     <div style="display: flex; flex-direction: row; justify-content: space-between">
-      <h3 className="content-title">타이틀</h3>
+      <h3 className="content-title"></h3>
       <input id="searchInput" type="text" placeholder="조직도 검색" />
     </div>
   `;
