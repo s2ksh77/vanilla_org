@@ -6,12 +6,7 @@ div#app {
 }
 
 .tree-node {
-  padding: 4px 0px 4px 20px;
   font-size: 14px;
-}
-
-.tree-node[data-depth="0"] {
-  padding: 4px 20px;
 }
 
 .tree-node .toggle-btn {
@@ -44,12 +39,19 @@ div#app {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 0;
+  padding: 4px 0px 4px calc(var(--depth) * 20px);
+  width: calc(100% - (var(--depth) * 20px));
 }
 
 .tree-node-wrapper img {
   width: 30px;
   height: 30px;
+}
+
+.selected {
+  background-color: #e6f7ff;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 ul,

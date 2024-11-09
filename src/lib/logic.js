@@ -56,7 +56,7 @@ export function createTreeNode(department, depth = 0, type = "html") {
 function createTreeNodeHTML(department, depth) {
   return `
     <li class="tree-node" data-code="${department.code}" data-depth="${depth}">
-      <div class="tree-node-wrapper">
+      <div class="tree-node-wrapper" style="--depth: ${depth};">
         <button class="toggle-btn">+</button>
         <img src="${getTreeImgByDepth(depth)}" />
         <span class="tree-title">${department.name}</span>
@@ -87,7 +87,8 @@ function setupTreeNode(department, depth) {
 
   span.textContent = department.name;
   li.dataset.code = department.code;
-  li.dataset.depth = depth;
+  li.dataset.depth = department.depth;
+  wrapper.style.setProperty("--depth", depth);
   li.appendChild(wrapper);
   return li;
 }
@@ -101,6 +102,9 @@ function createToggleButton() {
 
 function toggleEventDelegation(targetElement) {
   const handleEvent = async (event) => {
+    const { target } = event;
+    const li = target.closest("li");
+
     const handleToggleButton = async (li, button, code, depth) => {
       const childrenUl = li.querySelector("ul");
       if (!childrenUl) {
@@ -114,15 +118,23 @@ function toggleEventDelegation(targetElement) {
       }
     };
 
-    if (event.target.classList.contains("toggle-btn")) {
-      const li = event.target.closest("li");
-      const button = event.target.closest("button");
+    const toggleSelect = (wrapper) => {
+      const selectedElement = targetElement.querySelector(".selected");
+      if (selectedElement) selectedElement.classList.remove("selected");
+      wrapper.classList.toggle("selected");
+    };
+
+    if (target.classList.contains("toggle-btn")) {
+      const button = target.closest("button");
       const { code, depth } = li.dataset;
       await handleToggleButton(li, button, code, depth);
     }
 
-    if (event.target.classList.contains("tree-title")) {
-      const li = event.target.closest("li");
+    if (
+      target.classList.contains("tree-node-wrapper") ||
+      target.classList.contains("tree-title")
+    ) {
+      toggleSelect(target.closest("li div"));
       const { code } = li.dataset;
       const textContent = li.querySelector("span").textContent;
       const customEvent = new CustomEvent("nodeClick", {
