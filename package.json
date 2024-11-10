@@ -1,7 +1,6 @@
 {
   "name": "kakaobank_organization",
   "version": "0.0.1",
-  "type": "module",
   "scripts": {
     "dev:start": "serve src -p 3000",
     "dev": "concurrently 'npm:dev:start' 'npm:server'",

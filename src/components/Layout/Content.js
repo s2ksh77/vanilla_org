@@ -1,6 +1,6 @@
 import { search } from "../../lib/api.js";
 import { fetchUsersByDepartment } from "../../lib/logic.js";
-import { createTable } from "./Table/Table.js";
+import { createTable } from "../Table/Table.js";
 
 export default function Content() {
   const Content = document.createElement("div");

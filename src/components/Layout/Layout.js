@@ -1,4 +1,4 @@
-import { initializeTree } from "../../lib/logic.js";
+import { initializeTree } from "../Tree/Tree.js";
 import LNB from "./lnb.js";
 import Content from "./content.js";
 
