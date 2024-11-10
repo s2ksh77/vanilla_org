@@ -9,6 +9,24 @@ div#app {
   font-size: 14px;
 }
 
+.tree-node ul {
+  max-height: 0;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+  overflow: hidden;
+  transition-property: max-height, opacity, transform;
+  transition-duration: 0.3s, 0.6s, 0.6s;
+  transition-timing-function: ease;
+}
+
+.tree-node ul:not(.hidden) {
+  max-height: 100vh;
+  opacity: 1;
+  transform: scaleY(1);
+  transition-duration: 0.6s, 0.6s, 0.3s;
+}
+
 .tree-node .toggle-btn {
   display: inline-flex;
   align-items: center;
@@ -59,10 +77,6 @@ li {
   list-style-type: none;
   padding: 0;
   margin: 0;
-}
-
-.hidden {
-  display: none;
 }
 
 .lnb {
