@@ -22,6 +22,14 @@
 - **[조직도 2]: Full Loading**
   - 전체 조직도를 한 번에 로드하여 모든 데이터를 한눈에 볼 수 있는 방식입니다.
 
+## 설치 및 실행 방법
+
+```bash
+npm install
+
+npm run dev
+```
+
 ## 폴더 구조
 
 ```plaintext
@@ -32,10 +40,11 @@ src/
 │       └── constants.js       # 공통 상수 파일
 ├── components/
 │   ├── layout/                # 전체 레이아웃을 관리하는 폴더
-│   │   ├── content.js
-│   │   ├── header.js
-│   │   ├── layout.js
-│   │   └── lnb.js
+│   │   ├── Content.js
+│   │   ├── Layout.js
+│   │   └── LNB.js
+│   ├── Tab/                   # 탭 관련 컴포넌트 폴더
+│   │   ├── Tab.js
 │   ├── Table/                 # 테이블과 페이지네이션 관련 컴포넌트 폴더
 │   │   ├── Pagination.js
 │   │   └── Table.js
@@ -46,7 +55,6 @@ src/
 │       └── treeNode.js
 ├── lib/
 │   ├── api.js                 # API 호출 관련 함수 (데이터 가져오기)
-│   ├── logic.js               # 주요 로직 및 데이터 처리 함수
 │   └── utils.js               # 유틸리티 함수들
 ├── styles/
 │   ├── globals.css            # 전역 스타일 시트
