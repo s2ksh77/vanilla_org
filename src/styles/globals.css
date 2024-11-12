@@ -99,6 +99,10 @@ li {
   padding: 20px;
 }
 
+.wrapper {
+  height: calc(100% - 28px);
+}
+
 .content input[type="text"] {
   width: 250px;
   padding: 10px 15px;
@@ -178,6 +182,11 @@ table td {
   border: none;
 }
 
+.prev-btn,
+.next-btn:hover {
+  cursor: pointer;
+}
+
 .page-btn.active {
   background-color: #bbb;
   color: #fff;
@@ -188,7 +197,6 @@ table td {
 }
 
 /** 탭 */
-
 .tab-container {
   display: flex;
   height: 50px;
@@ -198,7 +206,9 @@ table td {
 }
 
 .tab-content-container {
+  height: calc(100% - 115px);
   overflow-y: auto;
+  margin-bottom: 15px;
 }
 
 .tab-content-container.hidden {
@@ -228,4 +238,15 @@ table td {
 
 .tab-content.active {
   display: block;
+}
+
+/** 스크롤바 */
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #bdc1c6;
+  border-radius: 4px;
 }
