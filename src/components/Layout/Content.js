@@ -1,5 +1,4 @@
-import { search } from "../../lib/api.js";
-import { fetchUsersByDepartment } from "../../lib/logic.js";
+import { fetchUserList, search } from "../../lib/api.js";
 import { createTable } from "../Table/Table.js";
 
 export default function Content() {
@@ -14,13 +13,17 @@ export default function Content() {
   `;
   Content.innerHTML = ContentHeader;
 
-  Content.setTextContent = (textContent) => {
-    Content.querySelector("h3").innerText = `${textContent}`;
+  Content.setTextContent = (textContent) =>
+    (Content.querySelector("h3").innerText = `${textContent}`);
+
+  let userList = null;
+  const fetchUsersByDepartment = async (departmentCode) => {
+    if (!userList) userList = await fetchUserList();
+    return userList.filter((user) => user.departmentCode === departmentCode);
   };
 
   Content.setDepartmentCode = async (code) => {
     const res = await fetchUsersByDepartment(code);
-
     updateTable(res);
   };
 

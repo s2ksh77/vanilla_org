@@ -5,6 +5,7 @@ div#app {
   margin: 0px;
 }
 
+/** 트리 */
 .tree-node {
   font-size: 14px;
 }
@@ -89,6 +90,7 @@ li {
 .layout {
   display: flex;
   height: 100%;
+  overflow: hidden;
 }
 
 .content {
@@ -112,6 +114,7 @@ li {
   margin: 0;
 }
 
+/** 테이블 */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -182,4 +185,47 @@ table td {
 
 .pagination button:disabled {
   cursor: not-allowed;
+}
+
+/** 탭 */
+
+.tab-container {
+  display: flex;
+  height: 50px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 15px;
+}
+
+.tab-content-container {
+  overflow-y: auto;
+}
+
+.tab-content-container.hidden {
+  display: none;
+}
+
+.tab {
+  width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.tab.active {
+  background-color: #fff;
+  border-top: 2px solid rgb(25, 118, 210);
+  color: rgb(25, 118, 210);
+}
+
+.tab-content {
+  display: none;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.tab-content.active {
+  display: block;
 }

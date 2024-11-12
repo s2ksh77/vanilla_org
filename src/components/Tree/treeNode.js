@@ -15,25 +15,68 @@ export function createTreeNode(department, depth = 0, type = "html") {
     : createTreeNodeElement(department, depth);
 }
 
-function createTreeNodeHTML(department, depth) {
+function createTreeNodeHTML(department, depth, type = "lazy", count) {
+  const btnText = type === "lazy" ? "+" : "-";
+  const title =
+    type === "lazy" ? department.name : `${department.name} (${count})`;
+
   return `
       <li class="tree-node" data-code="${
         department.code
       }" data-depth="${depth}">
         <div class="tree-node-wrapper" style="--depth: ${depth};">
-          <button class="toggle-btn">+</button>
+          <button class="toggle-btn">${btnText}</button>
           <img src="${getTreeImgByDepth(depth)}" />
-          <span class="tree-title">${department.name}</span>
+          <span class="tree-title">${title}</span>
         </div>
       </li>
     `;
 }
 
-function createTreeNodeElement(department, depth) {
-  return setupTreeNode(department, depth);
+export function createFullTreeHTML(parentCode, data, userList, depth = 0) {
+  const children = data.filter((node) => node.parentCode === parentCode);
+  if (children.length === 0 && depth !== 0) return "<ul></ul>";
+
+  const childrenHTML = generateChildrenHTML(children, data, userList, depth);
+
+  return depth !== 0 ? `<ul>${childrenHTML}</ul>` : childrenHTML;
 }
 
-function setupTreeNode(department, depth) {
+function generateChildrenHTML(children, data, userList, depth) {
+  const userCounts = getUserCountsByDepartment(userList);
+
+  return children
+    .map((child) =>
+      createChildNodeHTML(child, data, userList, userCounts, depth)
+    )
+    .join("");
+}
+
+function createChildNodeHTML(children, data, userList, userCounts, depth) {
+  const userCount = userCounts[children.code] || 0;
+  let childrenHTML = createTreeNodeHTML(children, depth + 1, "full", userCount);
+  const childTreeHTML = createFullTreeHTML(
+    children.code,
+    data,
+    userList,
+    depth + 1
+  );
+
+  return childrenHTML.replace("</li>", `${childTreeHTML}</li>`);
+}
+
+let userCounts = {};
+export function getUserCountsByDepartment(userList) {
+  if (Object.keys(userCounts).length === 0) {
+    userList.forEach((user) => {
+      const departmentCode = user.departmentCode;
+      userCounts[departmentCode] = (userCounts[departmentCode] || 0) + 1;
+    });
+  }
+  return userCounts;
+}
+
+function createTreeNodeElement(department, depth) {
   const li = document.createElement("li");
   const wrapper = document.createElement("div");
   const span = document.createElement("span");

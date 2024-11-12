@@ -1,13 +1,28 @@
 import { fetchChildrenNode } from "./appendNode.js";
 
-export function treeEventDelegation(targetElement) {
-  targetElement.addEventListener("click", (e) =>
-    handleClickEvent(e, targetElement)
-  );
-  targetElement.addEventListener("mouseover", handleMouseOverEvent);
+export function treeEventDelegation(type, targetElement) {
+  handleAddClickEvent(type, targetElement);
+  if (type === "lazy")
+    targetElement.addEventListener("mouseover", handleMouseOverEvent);
 }
 
-async function handleClickEvent(event, targetElement) {
+function handleAddClickEvent(type, targetElement) {
+  if (targetElement.handleClickEventHandler)
+    targetElement.removeEventListener(
+      "click",
+      targetElement.handleClickEventHandler
+    );
+
+  targetElement.handleClickEventHandler = (e) =>
+    handleClickEvent(e, targetElement, type);
+
+  targetElement.addEventListener(
+    "click",
+    targetElement.handleClickEventHandler
+  );
+}
+
+async function handleClickEvent(event, targetElement, type = "lazy") {
   const { target } = event;
   const li = target.closest("li");
 
@@ -15,7 +30,7 @@ async function handleClickEvent(event, targetElement) {
 
   const handleToggleButton = async (li, button, code, depth) => {
     const childrenUl = li.querySelector("ul");
-    if (!childrenUl) {
+    if (!childrenUl && type === "lazy") {
       await fetchChildrenNode({
         parentNode: li,
         parentCode: code,
