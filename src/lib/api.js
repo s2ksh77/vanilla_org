@@ -1,43 +1,44 @@
-export async function fetchUserList() {
-  try {
-    const res = await fetch("http://localhost:3001/userList");
-    return await res.json();
-  } catch (e) {
-    console.error("Failed to fetch data:", e);
-    throw e;
+import { ERROR_STATUS } from "../common/constants.js";
+
+class OrgRepository {
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl;
+  }
+
+  async handleFetch(url, options = {}) {
+    try {
+      const res = await fetch(`${this.baseUrl}${url}`, options);
+      if (!res.ok) {
+        const errorMsg = this.getErrorMessage(res);
+        throw new Error(errorMsg);
+      }
+
+      return await res.json();
+    } catch (e) {
+      console.error(`Network error :`, e);
+      throw e;
+    }
+  }
+  getErrorMessage(res) {
+    const { status, statusText } = res;
+    return ERROR_STATUS[status] || `Failed to fetch data: ${statusText}`;
+  }
+
+  async fetchUserList() {
+    return this.handleFetch("/userList");
+  }
+
+  async search(query) {
+    return this.handleFetch(`/userList?q=${query}`);
+  }
+
+  async fetchDepartmentList() {
+    return this.handleFetch("/departmentList");
+  }
+
+  async fetchDepartmentNode(parentCode) {
+    return this.handleFetch(`/departmentList?parentCode=${parentCode}`);
   }
 }
 
-export async function search(query) {
-  try {
-    const res = await fetch(`http://localhost:3001/userList?q=${query}`);
-    return await res.json();
-  } catch (e) {
-    console.error("Failed to fetch data:", e);
-    throw e;
-  }
-}
-
-export async function fetchDepartmentList() {
-  try {
-    const res = await fetch("http://localhost:3001/departmentList");
-    return await res.json();
-  } catch (e) {
-    console.error("Failed to fetch data:", e);
-    throw e;
-  }
-}
-
-export async function fetchDepartmentNode(parentCode) {
-  try {
-    const res = await fetch(
-      `http://localhost:3001/departmentList?parentCode=${parentCode}`
-    );
-    if (!res.ok) throw new Error("Network Error: fetch error");
-
-    return await res.json();
-  } catch (e) {
-    console.error("Failed to fetch data:", e);
-    throw e;
-  }
-}
+export const orgRepository = new OrgRepository("http://localhost:3001");

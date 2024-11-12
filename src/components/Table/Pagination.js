@@ -2,6 +2,7 @@ export function createPagination(totalItems, onPageChange, rowsPerPage = 10) {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
   const pagination = document.createElement("div");
   pagination.classList.add("pagination");
+
   if (totalItems === 0) return pagination;
 
   pagination.innerHTML = createPaginationButtons(1, totalPages);
@@ -16,10 +17,10 @@ export function createPagination(totalItems, onPageChange, rowsPerPage = 10) {
   const handleEventDelegation = (event) => {
     const target = event.target;
     const activeButton = pagination.querySelector(".page-btn.active");
-    const currentPage = parseInt(activeButton.dataset.page, 10);
+    const currentPage = Number(activeButton.textContent);
 
     if (target.classList.contains("page-btn")) {
-      const targetPage = parseInt(target.dataset.page, 10);
+      const targetPage = Number(target.textContent);
       if (!isNaN(targetPage) && targetPage > 0) {
         handlePageChange(targetPage);
       }
@@ -38,11 +39,11 @@ function updatePagination(pagination, currentPage, totalPages) {
   const prevButton = pagination.querySelector(".prev-btn");
   const nextButton = pagination.querySelector(".next-btn");
 
-  if (prevButton) prevButton.disabled = currentPage <= 1;
-  if (nextButton) nextButton.disabled = currentPage >= totalPages;
+  prevButton.disabled = currentPage <= 1;
+  nextButton.disabled = currentPage >= totalPages;
 
-  Array.from(pagination.querySelectorAll(".page-btn")).forEach((btn) => {
-    const btnPage = parseInt(btn.dataset.page, 10);
+  pagination.querySelectorAll(".page-btn").forEach((btn) => {
+    const btnPage = Number(btn.textContent);
     btn.classList.toggle("active", btnPage === currentPage);
   });
 }

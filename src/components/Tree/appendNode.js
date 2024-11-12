@@ -1,4 +1,4 @@
-import { fetchDepartmentNode, fetchUserList } from "../../lib/api.js";
+import { orgRepository } from "../../lib/api.js";
 import { createFullTreeHTML, createTreeNode } from "./treeNode.js";
 
 export async function fetchChildrenNode({
@@ -8,7 +8,7 @@ export async function fetchChildrenNode({
   type = "html",
   hidden = true,
 }) {
-  const data = await fetchDepartmentNode(parentCode);
+  const data = await orgRepository.fetchDepartmentNode(parentCode);
   type === "html"
     ? appendChildListHTML({
         data,
@@ -51,7 +51,7 @@ function appendChildListNode({ data, parentNode, depth, hidden }) {
 let userList = null;
 
 export async function initializeFullTree(rootCode, data) {
-  if (!userList) userList = await fetchUserList();
+  if (!userList) userList = await orgRepository.fetchUserList();
   const rootNode = document.createElement("ul");
   const rootHTML = createFullTreeHTML(rootCode, data, userList);
   rootNode.insertAdjacentHTML("beforeend", rootHTML);

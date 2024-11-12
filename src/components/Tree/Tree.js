@@ -1,4 +1,4 @@
-import { fetchDepartmentList, fetchDepartmentNode } from "../../lib/api.js";
+import { orgRepository } from "../../lib/api.js";
 import { fetchChildrenNode, initializeFullTree } from "./appendNode.js";
 import { treeEventDelegation } from "./events.js";
 import {
@@ -21,7 +21,7 @@ export async function initializeTree(
 }
 
 async function renderLazyLoadTree(rootCode = "0", targetElement) {
-  const rootData = await fetchDepartmentNode(rootCode);
+  const rootData = await orgRepository.fetchDepartmentNode(rootCode);
   const rootNode = createTreeNode(rootData[0], 0, "node");
   const rootUl = createRootUl(rootNode);
   targetElement.appendChild(rootUl);
@@ -40,7 +40,7 @@ async function renderLazyLoadTree(rootCode = "0", targetElement) {
 }
 
 async function renderFullTree(targetElement) {
-  const rootData = await fetchDepartmentList();
+  const rootData = await orgRepository.fetchDepartmentList();
   const rootNode = await initializeFullTree("0", rootData);
   targetElement.appendChild(rootNode);
 

@@ -1,4 +1,4 @@
-import { fetchUserList, search } from "../../lib/api.js";
+import { orgRepository } from "../../lib/api.js";
 import { createTable } from "../Table/Table.js";
 
 export default function Content() {
@@ -18,7 +18,7 @@ export default function Content() {
 
   let userList = null;
   const fetchUsersByDepartment = async (departmentCode) => {
-    if (!userList) userList = await fetchUserList();
+    if (!userList) userList = await orgRepository.fetchUserList();
     return userList.filter((user) => user.departmentCode === departmentCode);
   };
 
@@ -35,7 +35,7 @@ export default function Content() {
   };
 
   const handleSearch = async (query) => {
-    const res = await search(query);
+    const res = await orgRepository.search(query);
     if (res.length === 0) await handleEmptyResult();
     else updateTable(res);
   };
